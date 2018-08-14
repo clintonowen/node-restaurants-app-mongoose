@@ -1,12 +1,14 @@
-"use strict";
+'use strict';
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 // this is our schema to represent a restaurant
 const restaurantSchema = mongoose.Schema({
+  // the `name` property is String type and required
   name: { type: String, required: true },
   borough: { type: String, required: true },
   cuisine: { type: String, required: true },
+  // the `address` property is an object
   address: {
     building: String,
     // coord will be an array of string values
@@ -17,6 +19,7 @@ const restaurantSchema = mongoose.Schema({
   // grades will be an array of objects
   grades: [
     {
+      // Date type!
       date: Date,
       grade: String,
       score: Number
@@ -29,12 +32,12 @@ const restaurantSchema = mongoose.Schema({
 // properties that are stored in the database. Here we use it
 // to generate a human readable string based on the address object
 // we're storing in Mongo.
-restaurantSchema.virtual("addressString").get(function() {
+restaurantSchema.virtual('addressString').get(function() {
   return `${this.address.building} ${this.address.street}`.trim();
 });
 
 // this virtual grabs the most recent grade for a restaurant.
-restaurantSchema.virtual("grade").get(function() {
+restaurantSchema.virtual('grade').get(function() {
   const gradeObj =
     this.grades.sort((a, b) => {
       return b.date - a.date;
@@ -58,6 +61,6 @@ restaurantSchema.methods.serialize = function() {
 
 // note that all instance methods and virtual properties on our
 // schema must be defined *before* we make the call to `.model`.
-const Restaurant = mongoose.model("Restaurant", restaurantSchema);
+const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 
 module.exports = { Restaurant };
